@@ -1,25 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Counter } from './components/features/counter/Counter';
+import {
+  Switch,
+  Route,
+   Link
+} from "react-router-dom";
+import {Inner} from './components/features/inner/Inner';
+import s from './App.module.scss';
+import {ChangeLanguage} from './components/features/changeLanguage/ChangeLanguage';
 
 function App() {
+console.log(s)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <div className={s.root}>
+      <Link to="/">Home</Link>
+      <Link to="/inner">Inner page</Link>
+
+      <ChangeLanguage />
     </div>
+    <Switch>
+        <Route path="/" exact>
+            <Counter />
+        </Route>
+        <Route path="/inner">
+            <Inner />
+        </Route>
+    </Switch>
+    </>
   );
 }
 
