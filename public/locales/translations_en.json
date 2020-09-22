@@ -1,4 +1,6 @@
 {
     "hello_key": "Some hello",
-    "inner_key": "Inner page"   
+    "inner_key": "Inner page",
+    "call_button": "Call",
+    "hangup_button": "Hang Up"
 }

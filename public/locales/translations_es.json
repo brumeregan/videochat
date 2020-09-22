@@ -1,4 +1,6 @@
 {
     "hello_key": "Hola!",
-    "inner_key": "Página interior"   
+    "inner_key": "Página interior",
+    "call_button": "Llamar",
+    "hangup_button": "Colgar"
 }
