@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'antd';
 import {handleConnectionSuccess,
-     setSessionDescriptionError,
-      setDescriptionSuccess,
+       setSessionDescriptionError,
+       setDescriptionSuccess,
        handleConnectionFailure,
        handleLocalMediaStreamError} from './helpers'
 
@@ -27,8 +28,8 @@ export const VideoPage: React.FC = () => {
     const localStream = React.useRef<MediaStream>();
 
     // TODO: maybe to move all this to some controller function?
+    // View component only represent addListeners and all new instances on separate layout
     const handleConnection = (event: RTCPeerConnectionIceEvent) => {
-        console.log({event})
         const iceCandidate = event.candidate as RTCIceCandidateInit;  // TODO: why it needs to be as?
 
         if (iceCandidate !== null) {
@@ -126,8 +127,8 @@ export const VideoPage: React.FC = () => {
             <video autoPlay={true} ref={remoteVideo} />
 
             <div>
-                <button id="callButton" onClick={callHandler}>{t('call_button')}</button>
-                <button id="hangupButton">{t('hangup_button')}</button>
+                <Button type="primary" onClick={callHandler}>{t('call_button')}</Button>
+                <Button type="default" danger={true}>{t('hangup_button')}</Button>
             </div>
         </div>
     )
