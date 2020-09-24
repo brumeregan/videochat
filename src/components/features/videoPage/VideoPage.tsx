@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import {handleConnectionSuccess,
      setSessionDescriptionError,
       setDescriptionSuccess,
-       handleConnectionFailure} from './helpers'
+       handleConnectionFailure,
+       handleLocalMediaStreamError} from './helpers'
 
 export enum ICEEvents {
     CANDIDATE = 'icecandidate',
@@ -11,7 +12,7 @@ export enum ICEEvents {
     ADDSTREAM = 'addstream'
 }
 
-export const VideoPage = () => {
+export const VideoPage: React.FC = () => {
     const {t} = useTranslation();
     const mediaStreamConstraints = {
         video: true,
@@ -28,34 +29,31 @@ export const VideoPage = () => {
     // TODO: maybe to move all this to some controller function?
     const handleConnection = (event: RTCPeerConnectionIceEvent) => {
         console.log({event})
-        const iceCandidate = event.candidate as RTCIceCandidateInit;  // TODO: add appropriate type!
+        const iceCandidate = event.candidate as RTCIceCandidateInit;  // TODO: why it needs to be as?
 
-        
         if (iceCandidate !== null) {
           const newIceCandidate = new RTCIceCandidate(iceCandidate);
 
           if(remotePeerConnection.current) {
             remotePeerConnection.current.addIceCandidate(newIceCandidate)
-            .then(() => {
-              handleConnectionSuccess();
-            }).catch((error: Error) => {
-              handleConnectionFailure(error);
-            });
+                .then(() => {
+                    handleConnectionSuccess();
+                }).catch((error: Error) => handleConnectionFailure(error));
           }
         }
       }
 
-      const createdAnswer = (description: RTCSessionDescriptionInit) => {
+    const createdAnswer = (description: RTCSessionDescriptionInit) => {
         remotePeerConnection.current!.setLocalDescription(description)
-          .then(() => {
-            console.log('add local description to remote one')
-          }).catch(setSessionDescriptionError);
-      
+            .then(() => {
+                console.log('add local description to remote one')
+            }).catch(setSessionDescriptionError);
+        
         localPeerConnection.current!.setRemoteDescription(description)
-          .then(() => {
-            setDescriptionSuccess('setRemoteDescription');
-          }).catch(setSessionDescriptionError);
-      }
+            .then(() => {
+                setDescriptionSuccess('setRemoteDescription');
+            }).catch(setSessionDescriptionError);
+    }
 
     const callHandler = () => {
         localPeerConnection.current = new RTCPeerConnection();
@@ -113,10 +111,6 @@ export const VideoPage = () => {
             localVideo.current.srcObject = mediaStream;
             localStream.current = mediaStream;
         }
-    }
-
-    const handleLocalMediaStreamError = (error: Error) => {
-        console.log(`handleLocalMediaStreamError error: ${error.toString()}.`);
     }
 
     React.useEffect(() => {
