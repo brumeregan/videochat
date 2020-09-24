@@ -13,6 +13,9 @@ export const setDescriptionSuccess = (functionName: any) => {
 
 export const handleConnectionFailure = (error: Error) => {
     console.log(`failed to add ICE Candidate:\n`+
-          `${error.toString()}.`);
+        `${error.toString()}.`);
+}
 
-  }
+export const handleLocalMediaStreamError = (error: Error) => {
+    console.log(`handleLocalMediaStreamError error: ${error.toString()}.`);
+}
